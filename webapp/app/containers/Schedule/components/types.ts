@@ -22,7 +22,7 @@ import { IScheduleVizConfigItem } from './ScheduleVizConfig/types'
 
 export * from './ScheduleVizConfig/types'
 export type JobStatus = 'new' | 'failed' | 'started' | 'stopped'
-export type JobType = 'email'
+export type JobType = 'email' | 'wechatX' | 'dingding'
 export type ScheduleType = 'image' | 'excel' | 'imageAndExcel'
 export type SchedulePeriodUnit =
   | 'Minute'

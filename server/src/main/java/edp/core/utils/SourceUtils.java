@@ -142,6 +142,7 @@ public class SourceUtils {
     public static boolean checkDriver(String dataSourceName, String jdbcUrl, String version, boolean isExt) {
 
     	if (StringUtils.isEmpty(dataSourceName) || !LoadSupportDataSourceRunner.getSupportDatasourceMap().containsKey(dataSourceName)) {
+    	    log.error("Error Lines-->" + "if (StringUtils.isEmpty(dataSourceName) || !LoadSupportDataSourceRunner.getSupportDatasourceMap().containsKey(dataSourceName))");
             throw new SourceException("Not supported data type: jdbcUrl=" + jdbcUrl);
         }
         
@@ -179,9 +180,11 @@ public class SourceUtils {
     public static String isSupportedDatasource(String jdbcUrl) {
         String dataSourceName = getDataSourceName(jdbcUrl);
         if (StringUtils.isEmpty(dataSourceName)) {
+            log.error("Error Line--->" + "if (StringUtils.isEmpty(dataSourceName))");
             throw new SourceException("Not supported data type: jdbcUrl=" + jdbcUrl);
         }
         if (!LoadSupportDataSourceRunner.getSupportDatasourceMap().containsKey(dataSourceName)) {
+            log.error("Error Line--->" + "if (!LoadSupportDataSourceRunner.getSupportDatasourceMap().containsKey(dataSourceName))");
             throw new SourceException("Not supported data type: jdbcUrl=" + jdbcUrl);
         }
 
@@ -201,6 +204,7 @@ public class SourceUtils {
         if (matcher.find()) {
             dataSourceName = matcher.group().split(COLON)[1];
         }
+        log.info("dataSourceName-->" + dataSourceName );
         return dataSourceName;
     }
 
@@ -231,6 +235,7 @@ public class SourceUtils {
         }
 
         if (null == dataTypeEnum && null == customDataSource) {
+            log.error("Error Line--->" + "if (null == dataTypeEnum && null == customDataSource)");
             throw new SourceException("Not supported data type: jdbcUrl=" + jdbcUrl);
         }
 

@@ -44,7 +44,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Scope;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
@@ -246,7 +248,62 @@ public class SqlUtils {
     }
 
     private void getResultForPaginate(String sql, PaginateWithQueryColumns paginateWithQueryColumns, JdbcTemplate jdbcTemplate, Set<String> excludeColumns, int startRow) {
-		Set<String> queryFromsAndJoins = getQueryFromsAndJoins(sql);
+    	Set<String> queryFromsAndJoins = getQueryFromsAndJoins(sql);
+
+
+//		PaginateWithQueryColumns returnPaginateWithQueryColumns = (PaginateWithQueryColumns)jdbcTemplate.query(sql, new ResultSetExtractor(){
+//
+//			public Object extractData(ResultSet rs) throws SQLException, DataAccessException {
+//				    PaginateWithQueryColumns thePaginateWithQueryColumns  = new PaginateWithQueryColumns();
+//					if (null == rs) {
+//						return null;
+//					}
+//
+//					ResultSetMetaData metaData = rs.getMetaData();
+//					List<QueryColumn> queryColumns = new ArrayList<>();
+//					for (int i = 1; i <= metaData.getColumnCount(); i++) {
+//						String key = getColumnLabel(queryFromsAndJoins, metaData.getColumnLabel(i));
+//						if (!CollectionUtils.isEmpty(excludeColumns) && excludeColumns.contains(key)) {
+//							continue;
+//						}
+//						queryColumns.add(new QueryColumn(key, metaData.getColumnTypeName(i)));
+//					}
+//
+//					thePaginateWithQueryColumns.setColumns(queryColumns);
+//
+//					List<Map<String, Object>> resultList = new ArrayList<>();
+//
+//					try {
+//						if (startRow > 0) {
+//							rs.absolute(startRow);
+//						}
+//						while (rs.next()) {
+//							resultList.add(getResultObjectMap(excludeColumns, rs, metaData, queryFromsAndJoins));
+//						}
+//					} catch (Throwable e) {
+//						int currentRow = 0;
+//						while (rs.next()) {
+//							if (currentRow >= startRow) {
+//								resultList.add(getResultObjectMap(excludeColumns, rs, metaData, queryFromsAndJoins));
+//							}
+//							currentRow++;
+//						}
+//					}
+//
+//				    thePaginateWithQueryColumns.setResultList(resultList);
+//
+//					return thePaginateWithQueryColumns;
+//
+//			}});
+//
+//			if(returnPaginateWithQueryColumns != null){
+//				paginateWithQueryColumns.setColumns(returnPaginateWithQueryColumns.getColumns());
+//				paginateWithQueryColumns.setResultList(returnPaginateWithQueryColumns.getResultList());
+//			}
+//			return paginateWithQueryColumns;
+
+    	//------------------------------------------------------
+
 		jdbcTemplate.query(sql, rs -> {
 			if (null == rs) {
 				return paginateWithQueryColumns;
@@ -259,7 +316,12 @@ public class SqlUtils {
 				if (!CollectionUtils.isEmpty(excludeColumns) && excludeColumns.contains(key)) {
 					continue;
 				}
-				queryColumns.add(new QueryColumn(key, metaData.getColumnTypeName(i)));
+				String theColumnTypeName = metaData.getColumnTypeName(i);
+				if(theColumnTypeName == null || theColumnTypeName.isEmpty()){
+					JDBCType type = JDBCType.valueOf(metaData.getColumnType(i));
+					theColumnTypeName = type != null ? type.getName() : null; //edited by Frank@20200309 in case of orientdb and some special database exception
+				}
+				queryColumns.add(new QueryColumn(key,theColumnTypeName));
 			}
 			paginateWithQueryColumns.setColumns(queryColumns);
 
@@ -653,6 +715,7 @@ public class SqlUtils {
         try {
             connection = sourceUtils.getConnection(this.jdbcSourceInfo);
         } catch (SourceException e) {
+        	log.error("Obtain Data source Connection Error, but process will go on. the error info as follows: \n" + e.getMessage());
         }
         if (connection == null) {
             sourceUtils.releaseDataSource(this.jdbcSourceInfo);

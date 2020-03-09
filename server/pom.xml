@@ -319,6 +319,30 @@
 			</exclusions>
 		</dependency>
 
+
+		<dependency>
+			<groupId>org.apache.calcite.avatica</groupId>
+			<artifactId>avatica</artifactId>
+			<version>1.16.0</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.apache.calcite.avatica</groupId>
+			<artifactId>avatica</artifactId>
+			<version>1.16.0</version>
+		</dependency>
+
+
+		<!-- https://mvnrepository.com/artifact/com.orientechnologies/orientdb-jdbc -->
+		<!-- 3.0.24 / 3.1.0-M3 -->
+		<dependency>
+			<groupId>com.orientechnologies</groupId>
+			<artifactId>orientdb-jdbc</artifactId>
+			<version>3.1.0-M3</version>
+		</dependency>
+
+
 		<dependency>
 			<groupId>org.apache.curator</groupId>
 			<artifactId>curator-test</artifactId>

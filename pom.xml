@@ -37,12 +37,12 @@
     </properties>
 
     <repositories>
-        <!--
+
         <repository>
             <id>alimaven</id>
             <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
         </repository>
-        -->
+
         <repository>
             <id>central</id>
             <name>Maven Repository</name>

@@ -229,6 +229,8 @@ export const ScheduleBaseConfig: React.FC<IScheduleBaseConfigProps> = (
             })(
               <Select>
                 <Option value="email">Email</Option>
+                <Option value="wechatX">企业微信群</Option>
+                <Option value="dingding">钉钉群</Option>
               </Select>
             )}
           </FormItem>

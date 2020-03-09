@@ -29,6 +29,7 @@ import edp.core.model.MailContent;
 import edp.core.utils.CollectionUtils;
 import edp.core.utils.MailUtils;
 import edp.core.utils.ServerUtils;
+import edp.core.utils.WeChatUtils;
 import edp.davinci.core.common.Constants;
 import edp.davinci.core.enums.ActionEnum;
 import edp.davinci.core.enums.CronJobMediaType;
@@ -203,6 +204,11 @@ public class EmailScheduleServiceImpl implements ScheduleService {
             log.error("EmailScheduleServiceImpl.execute, build MailContent error: {}", e.getMessage());
             scheduleLogger.error("EmailScheduleServiceImpl.execute, build MailContent error: {}", e.getMessage());
         }
+
+
+        WeChatUtils.sendImageMsgToWX(images); //---frank: just a test for wechat enterprise version
+        WeChatUtils.sendNewsMsgToWX(images); //---frank: just a test for wechat enterprise version
+
         mailUtils.sendMail(mailContent, null);
         scheduleLogger.info("CronJob (:{}) is finish! --------------", jobId);
     }
