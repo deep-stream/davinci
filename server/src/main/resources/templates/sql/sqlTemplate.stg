@@ -76,7 +76,7 @@ SELECT
  <aggregators:{agg|<if(agg)><agg><endif>}; separator=",">
 <endif>
 <endif>
-FROM (<sql>) T
+FROM (<sql>)
 <if(filters)>
 WHERE <filters:{filter|<if(filter)><filter><endif>}; separator=" AND ">
 <endif>
